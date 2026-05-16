@@ -1,0 +1,96 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #eef4ff, #dbeafe);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-card {
+    width: 390px;
+    background: white;
+    padding: 38px 34px;
+    border-radius: 18px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+    text-align: center;
+}
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.logo-text {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: #1f4e79;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 26px;
+    font-weight: bold;
+}
+
+.welcome-text {
+    font-size: 26px;
+    color: #1f2937;
+    margin-bottom: 6px;
+}
+
+.sub-text {
+    color: #6b7280;
+    font-size: 14px;
+    margin-bottom: 26px;
+}
+
+.input-group {
+    text-align: left;
+    margin-bottom: 18px;
+}
+
+.input-group label {
+    display: block;
+    color: #374151;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 7px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 13px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    font-size: 15px;
+    outline: none;
+}
+
+.input-group input:focus {
+    border-color: #1f4e79;
+}
+
+.btn-signin {
+    width: 100%;
+    padding: 13px;
+    background: #1f4e79;
+    border: none;
+    color: white;
+    font-size: 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 8px;
+}
+
+.btn-signin:hover {
+    background: #16324f;
+}
