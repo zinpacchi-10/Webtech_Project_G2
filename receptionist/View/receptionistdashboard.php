@@ -12,22 +12,19 @@ $sql_checkins = "SELECT COUNT(*) AS total_checkins FROM bookings WHERE checkin_d
 $stmt = $conn->prepare($sql_checkins);
 $stmt->bind_param("s", $today);
 $stmt->execute();
-$result = $stmt->get_result();
-$checkins = $result->fetch_assoc()["total_checkins"];
+$total_checkins = $stmt->get_result()->fetch_assoc()["total_checkins"];
 
 $sql_checkouts = "SELECT COUNT(*) AS total_checkouts FROM bookings WHERE checkout_date = ?";
 $stmt = $conn->prepare($sql_checkouts);
 $stmt->bind_param("s", $today);
 $stmt->execute();
-$result = $stmt->get_result();
-$checkouts = $result->fetch_assoc()["total_checkouts"];
+$total_checkouts = $stmt->get_result()->fetch_assoc()["total_checkouts"];
 
 $sql_checkedin = "SELECT COUNT(*) AS currently_checkedin FROM bookings WHERE checkin_date <= ? AND checkout_date >= ?";
 $stmt = $conn->prepare($sql_checkedin);
 $stmt->bind_param("ss", $today, $today);
 $stmt->execute();
-$result = $stmt->get_result();
-$checkedin = $result->fetch_assoc()["currently_checkedin"];
+$checkedin = $stmt->get_result()->fetch_assoc()["currently_checkedin"];
 
 $sql_available = "SELECT COUNT(*) AS available_rooms FROM rooms WHERE notes = 'available'";
 $result = $conn->query($sql_available);
@@ -37,6 +34,7 @@ $db->closeConn($conn);
 ?>
 
 <link rel="stylesheet" href="../CSS/receptionistdashboard.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <div class="main-content">
     <h1>Receptionist Dashboard</h1>
@@ -44,11 +42,11 @@ $db->closeConn($conn);
     <div class="dashboard-cards">
         <div class="card card-blue">
             <h3>Today's Check-ins</h3>
-            <p><?php echo $checkins; ?></p>
+            <p><?php echo $total_checkins; ?></p>
         </div>
         <div class="card card-red">
             <h3>Today's Check-outs</h3>
-            <p><?php echo $checkouts; ?></p>
+            <p><?php echo $total_checkouts; ?></p>
         </div>
         <div class="card card-green">
             <h3>Currently Checked-in Guests</h3>
@@ -58,6 +56,10 @@ $db->closeConn($conn);
             <h3>Available Rooms</h3>
             <p><?php echo $available_rooms; ?></p>
         </div>
+    </div>
+
+    <div class="chart-container">
+        <canvas id="summaryChart"></canvas>
     </div>
 
     <h2>Today’s Check-in List</h2>
@@ -105,3 +107,23 @@ $db->closeConn($conn);
         </table>
     </div>
 </div>
+
+<script>
+var ctx = document.getElementById('summaryChart').getContext('2d');
+var summaryChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ['Check-ins','Check-outs','Currently Checked-in','Available Rooms'],
+        datasets: [{
+            label: 'Today Summary',
+            data: [<?php echo $total_checkins; ?>, <?php echo $total_checkouts; ?>, <?php echo $checkedin; ?>, <?php echo $available_rooms; ?>],
+            backgroundColor: ['#2563eb','#dc2626','#16a34a','#facc15']
+        }]
+    },
+    options: {
+        responsive:true,
+        plugins:{legend:{display:false}},
+        scales:{y:{beginAtZero:true}}
+    }
+});
+</script>

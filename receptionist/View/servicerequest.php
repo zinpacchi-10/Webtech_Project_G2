@@ -7,7 +7,6 @@ require_once("../Model/db.php");
 $db = new db();
 $conn = $db->openConn();
 
-// Fetch all pending/in-progress service requests for occupied rooms
 $sql = "SELECT sr.id, u.name AS guest_name, r.room_number, sr.service_type, sr.description, sr.status, sr.requested_at
         FROM service_requests sr
         JOIN users u ON sr.guest_id = u.user_id
@@ -25,11 +24,11 @@ $result = $stmt->get_result();
     <h1>Guest Service Requests</h1>
 
     <?php
-    if(isset($_SESSION['service_success'])) {
+    if(isset($_SESSION['service_success'])){
         echo "<p class='success-message'>".$_SESSION['service_success']."</p>";
         unset($_SESSION['service_success']);
     }
-    if(isset($_SESSION['service_error'])) {
+    if(isset($_SESSION['service_error'])){
         echo "<p class='error-message'>".$_SESSION['service_error']."</p>";
         unset($_SESSION['service_error']);
     }
@@ -49,7 +48,7 @@ $result = $stmt->get_result();
                 </tr>
             </thead>
             <tbody>
-                <?php while($row = $result->fetch_assoc()) { ?>
+                <?php while($row = $result->fetch_assoc()){ ?>
                 <tr>
                     <td><?php echo $row['id']; ?></td>
                     <td><?php echo $row['guest_name']; ?></td>
@@ -58,9 +57,9 @@ $result = $stmt->get_result();
                     <td><?php echo $row['description']; ?></td>
                     <td><?php echo ucfirst(str_replace("_"," ",$row['status'])); ?></td>
                     <td>
-                        <form action="../Control/updateServiceRequest.php" method="post">
+                        <form action="../Control/updateServiceRequest.php" method="post" class="service-update-form">
                             <input type="hidden" name="request_id" value="<?php echo $row['id']; ?>">
-                            <select name="status">
+                            <select name="status" class="service-select">
                                 <option value="pending" <?php if($row['status']=='pending') echo 'selected'; ?>>Pending</option>
                                 <option value="in_progress" <?php if($row['status']=='in_progress') echo 'selected'; ?>>In Progress</option>
                                 <option value="completed" <?php if($row['status']=='completed') echo 'selected'; ?>>Completed</option>
