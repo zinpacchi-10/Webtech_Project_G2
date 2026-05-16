@@ -6,35 +6,31 @@ require_once("../Model/db.php");
 
 $db = new db();
 $conn = $db->openConn();
-
-// Today’s date
 $today = date("Y-m-d");
 
-// Count data for summary cards
-$checkins_sql = "SELECT COUNT(*) AS total_checkins FROM bookings WHERE checkin_date = ?";
-$checkouts_sql = "SELECT COUNT(*) AS total_checkouts FROM bookings WHERE checkout_date = ?";
-$checkedin_sql = "SELECT COUNT(*) AS currently_checkedin FROM bookings WHERE checkin_date <= ? AND checkout_date >= ?";
-$available_rooms_sql = "SELECT COUNT(*) AS available_rooms FROM rooms WHERE notes = 'available'";
-
-$stmt = $conn->prepare($checkins_sql);
+$sql_checkins = "SELECT COUNT(*) AS total_checkins FROM bookings WHERE checkin_date = ?";
+$stmt = $conn->prepare($sql_checkins);
 $stmt->bind_param("s", $today);
 $stmt->execute();
 $result = $stmt->get_result();
 $checkins = $result->fetch_assoc()["total_checkins"];
 
-$stmt = $conn->prepare($checkouts_sql);
+$sql_checkouts = "SELECT COUNT(*) AS total_checkouts FROM bookings WHERE checkout_date = ?";
+$stmt = $conn->prepare($sql_checkouts);
 $stmt->bind_param("s", $today);
 $stmt->execute();
 $result = $stmt->get_result();
 $checkouts = $result->fetch_assoc()["total_checkouts"];
 
-$stmt = $conn->prepare($checkedin_sql);
+$sql_checkedin = "SELECT COUNT(*) AS currently_checkedin FROM bookings WHERE checkin_date <= ? AND checkout_date >= ?";
+$stmt = $conn->prepare($sql_checkedin);
 $stmt->bind_param("ss", $today, $today);
 $stmt->execute();
 $result = $stmt->get_result();
 $checkedin = $result->fetch_assoc()["currently_checkedin"];
 
-$result = $conn->query($available_rooms_sql);
+$sql_available = "SELECT COUNT(*) AS available_rooms FROM rooms WHERE notes = 'available'";
+$result = $conn->query($sql_available);
 $available_rooms = $result->fetch_assoc()["available_rooms"];
 
 $db->closeConn($conn);
@@ -45,27 +41,25 @@ $db->closeConn($conn);
 <div class="main-content">
     <h1>Receptionist Dashboard</h1>
 
-    <!-- Summary Cards -->
     <div class="dashboard-cards">
-        <div class="card">
+        <div class="card card-blue">
             <h3>Today's Check-ins</h3>
             <p><?php echo $checkins; ?></p>
         </div>
-        <div class="card">
+        <div class="card card-red">
             <h3>Today's Check-outs</h3>
             <p><?php echo $checkouts; ?></p>
         </div>
-        <div class="card">
+        <div class="card card-green">
             <h3>Currently Checked-in Guests</h3>
             <p><?php echo $checkedin; ?></p>
         </div>
-        <div class="card">
+        <div class="card card-yellow">
             <h3>Available Rooms</h3>
             <p><?php echo $available_rooms; ?></p>
         </div>
     </div>
 
-    <!-- Today’s Check-in List -->
     <h2>Today’s Check-in List</h2>
     <div class="table-container">
         <table>
