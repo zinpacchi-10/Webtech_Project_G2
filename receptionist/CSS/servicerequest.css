@@ -43,3 +43,16 @@ table tr:hover {
     font-weight: bold;
     margin-bottom: 15px;
 }
+
+.btn-update {
+    padding: 6px 10px;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-update:hover {
+    background: #1e40af;
+}

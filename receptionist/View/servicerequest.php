@@ -45,6 +45,7 @@ $result = $stmt->get_result();
                     <th>Service Type</th>
                     <th>Description</th>
                     <th>Status</th>
+                    <th>Update Status</th>
                 </tr>
             </thead>
             <tbody>
@@ -56,6 +57,17 @@ $result = $stmt->get_result();
                     <td><?php echo $row['service_type']; ?></td>
                     <td><?php echo $row['description']; ?></td>
                     <td><?php echo ucfirst(str_replace("_"," ",$row['status'])); ?></td>
+                    <td>
+                        <form action="../Control/updateServiceRequest.php" method="post">
+                            <input type="hidden" name="request_id" value="<?php echo $row['id']; ?>">
+                            <select name="status">
+                                <option value="pending" <?php if($row['status']=='pending') echo 'selected'; ?>>Pending</option>
+                                <option value="in_progress" <?php if($row['status']=='in_progress') echo 'selected'; ?>>In Progress</option>
+                                <option value="completed" <?php if($row['status']=='completed') echo 'selected'; ?>>Completed</option>
+                            </select>
+                            <button type="submit" class="btn-update">Update</button>
+                        </form>
+                    </td>
                 </tr>
                 <?php } ?>
             </tbody>
