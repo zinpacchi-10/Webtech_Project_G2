@@ -7,6 +7,7 @@ if (!isset($_SESSION["receptionist_logged_in"])) {
     exit();
 }
 
+// Process form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["booking_id"], $_POST["checkin_date"], $_POST["checkout_date"])) {
     $booking_id = intval($_POST["booking_id"]);
     $new_checkin = $_POST["checkin_date"];
@@ -21,21 +22,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["booking_id"], $_POST["
     $db = new db();
     $conn = $db->openConn();
 
-    // Check room availability
+    // Get room_id for this booking
     $sql_room = "SELECT room_id FROM bookings WHERE booking_id=?";
     $stmt = $conn->prepare($sql_room);
     $stmt->bind_param("i", $booking_id);
     $stmt->execute();
-    $booking = $stmt->get_result()->fetch_assoc();
-    $room_id = $booking["room_id"];
+    $room_id = $stmt->get_result()->fetch_assoc()["room_id"];
 
-    $sql_check = "SELECT COUNT(*) AS conflict FROM bookings 
-                  WHERE room_id=? AND booking_id!=? AND 
-                  ((? BETWEEN checkin_date AND checkout_date) OR 
-                   (? BETWEEN checkin_date AND checkout_date) OR
-                   (checkin_date BETWEEN ? AND ?) OR 
-                   (checkout_date BETWEEN ? AND ?))";
-    $stmt2 = $conn->prepare($sql_check);
+    // Check room availability
+    $sql_conflict = "SELECT COUNT(*) AS conflict FROM bookings 
+                     WHERE room_id=? AND booking_id!=? AND 
+                     ((? BETWEEN checkin_date AND checkout_date) OR 
+                      (? BETWEEN checkin_date AND checkout_date) OR
+                      (checkin_date BETWEEN ? AND ?) OR 
+                      (checkout_date BETWEEN ? AND ?))";
+
+    $stmt2 = $conn->prepare($sql_conflict);
     $stmt2->bind_param("iissssss", $room_id, $booking_id, $new_checkin, $new_checkout, $new_checkin, $new_checkout, $new_checkin, $new_checkout);
     $stmt2->execute();
     $conflict = $stmt2->get_result()->fetch_assoc()["conflict"];
@@ -46,12 +48,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["booking_id"], $_POST["
         exit();
     }
 
-    // Update booking
+    // Update booking dates
     $sql_update = "UPDATE bookings SET checkin_date=?, checkout_date=? WHERE booking_id=?";
     $stmt3 = $conn->prepare($sql_update);
     $stmt3->bind_param("ssi", $new_checkin, $new_checkout, $booking_id);
     $stmt3->execute();
 
+    // Close statements and connection
     $stmt->close();
     $stmt2->close();
     $stmt3->close();
