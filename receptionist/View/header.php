@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../CSS/header.css">
@@ -7,7 +7,7 @@
 <body>
     <div class="flex-container-header">
         <div class="flex-item-header">
-            <a href="../View/adminhomepage.php"><span class="logo">HB</span></a>
+            <a href="receptionistdashboard.php"><span class="logo">HB</span></a>
         </div>
 
         <div>
@@ -15,7 +15,7 @@
             <p class="subtitle">Reception Desk Panel</p>
         </div>
 
-        <div id="flex-item-header">
+        <div class="flex-item-header-right">
             <span class="role-badge">Receptionist</span>
         </div>
     </div>

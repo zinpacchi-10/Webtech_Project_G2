@@ -1,41 +1,43 @@
 .flex-container-header {
     display: flex;
-    background: #0f172a;
-    color: white;
     align-items: center;
     justify-content: space-between;
-    padding: 14px 30px;
+    background: #f9fafb;
+    padding: 12px 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    margin-left: 220px; /* sidebar width */
 }
 
-.flex-container-header h1 {
-    font-size: 28px;
-    margin: 0;
-}
-
-.subtitle {
-    margin: 4px 0 0 0;
-    text-align: center;
-    font-size: 14px;
-    color: #cbd5e1;
+.flex-item-header {
+    display: flex;
+    align-items: center;
 }
 
 .logo {
-    height: 58px;
-    width: 58px;
-    display: inline-block;
-    border-radius: 50%;
-    background: #0f766e;
+    background-color: #1f4e79;
     color: white;
-    text-align: center;
-    line-height: 58px;
-    font-size: 20px;
     font-weight: bold;
+    font-size: 26px;
+    padding: 10px 16px;
+    border-radius: 12px;
+    margin-right: 12px;
 }
 
-.role-badge {
-    background: #2563eb;
+h1 {
+    font-size: 22px;
+    color: #1f2937;
+}
+
+.subtitle {
+    font-size: 14px;
+    color: #6b7280;
+    margin-top: 4px;
+}
+
+.flex-item-header-right .role-badge {
+    background-color: #2563eb;
     color: white;
-    padding: 10px 16px;
-    border-radius: 20px;
-    font-size: 15px;
+    font-size: 14px;
+    padding: 8px 12px;
+    border-radius: 8px;
 }

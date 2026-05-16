@@ -7,7 +7,7 @@
     left: 0;
     background: #102542;
     overflow-x: hidden;
-    transition: .5s;
+    transition: 0.5s;
     padding-top: 60px;
 }
 
@@ -17,7 +17,7 @@
     font-size: 17px;
     color: #e5e7eb;
     display: block;
-    transition: .3s;
+    transition: 0.3s;
 }
 
 .sidenav a:hover {
@@ -30,6 +30,7 @@
     top: 0;
     right: 18px;
     font-size: 36px;
+    cursor: pointer;
 }
 
 #label {
@@ -37,5 +38,6 @@
     color: white;
     font-weight: bold;
     font-size: 15px;
-    letter-spacing: .3px;
+    letter-spacing: 0.3px;
+    padding: 8px 28px;
 }

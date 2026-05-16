@@ -1,19 +1,29 @@
 <?php
 include("../Control/activecheck.php");
+include("header.php");
+include("receptionistsidebar.php");
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Receptionist Dashboard</title>
-</head>
-<body>
+<div class="main-content">
+    <h1>Receptionist Dashboard</h1>
+    <div class="dashboard-cards">
+        <div class="card">
+            <h3>Today's Check-ins</h3>
+            <p>0</p>
+        </div>
+        <div class="card">
+            <h3>Today's Check-outs</h3>
+            <p>0</p>
+        </div>
+        <div class="card">
+            <h3>Currently Checked-in Guests</h3>
+            <p>0</p>
+        </div>
+        <div class="card">
+            <h3>Available Rooms</h3>
+            <p>0</p>
+        </div>
+    </div>
+</div>
 
-    <h2>Welcome, <?php echo $_SESSION["receptionist_name"]; ?></h2>
-    <p>Receptionist Dashboard will be completed in next step.</p>
-
-    <a href="../Control/receptionistlogoutController.php">Logout</a>
-
-</body>
-</html>
+<?php include("footer.php"); ?>
