@@ -4,13 +4,12 @@ function fetchAvailableRooms(roomType, checkin, checkout, callback) {
         return;
     }
 
-    // Show loader if exists
     var list = document.getElementById("availableRoomsList");
     if(list) list.innerHTML = "<li>Loading...</li>";
 
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", "../Control/ajaxAvailableRooms.php?room_type=" + encodeURIComponent(roomType) + 
-                          "&checkin_date=" + encodeURIComponent(checkin) + 
+    xhr.open("GET", "../Control/ajaxAvailableRooms.php?room_type=" + encodeURIComponent(roomType) +
+                          "&checkin_date=" + encodeURIComponent(checkin) +
                           "&checkout_date=" + encodeURIComponent(checkout), true);
     xhr.onload = function() {
         if (xhr.status === 200) {
@@ -33,7 +32,6 @@ function fetchAvailableRooms(roomType, checkin, checkout, callback) {
     xhr.send();
 }
 
-// Event listener for Check Rooms button
 var checkBtn = document.getElementById("checkRoomsBtn");
 if(checkBtn){
     checkBtn.addEventListener("click", function() {
@@ -62,7 +60,6 @@ if(checkBtn){
     });
 }
 
-// Optional: enter key search support
 var checkinInput = document.getElementById("checkinDate");
 var checkoutInput = document.getElementById("checkoutDate");
 if(checkinInput && checkoutInput){

@@ -1,3 +1,5 @@
+@import url("receptionistcommon.css");
+
 .main-content h1{
     margin-bottom:25px;
     color:#1f2937;
@@ -14,6 +16,45 @@
 .receipt-card p{
     font-size:16px;
     margin:6px 0;
+}
+
+.receipt-head{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:16px;
+    border-bottom:1px solid #e5e7eb;
+    padding-bottom:16px;
+    margin-bottom:16px;
+}
+
+.receipt-head h2{
+    margin:0 0 6px;
+}
+
+.receipt-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
+    gap:10px 20px;
+}
+
+.receipt-lines{
+    margin-top:18px;
+    border-top:1px solid #e5e7eb;
+}
+
+.receipt-lines p{
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    margin:0;
+    padding:12px 0;
+    border-bottom:1px solid #eef2f7;
+}
+
+.receipt-lines .total{
+    font-size:20px;
+    color:#102542;
 }
 
 .btn-print{

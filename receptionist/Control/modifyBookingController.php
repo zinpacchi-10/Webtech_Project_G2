@@ -7,14 +7,13 @@ if (!isset($_SESSION["receptionist_logged_in"])) {
     exit();
 }
 
-// Process form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["booking_id"], $_POST["checkin_date"], $_POST["checkout_date"])) {
     $booking_id = intval($_POST["booking_id"]);
     $new_checkin = $_POST["checkin_date"];
     $new_checkout = $_POST["checkout_date"];
 
-    if ($new_checkout < $new_checkin) {
-        $_SESSION['modify_error'] = "Check-out date cannot be earlier than check-in date!";
+    if ($new_checkout <= $new_checkin) {
+        $_SESSION['modify_error'] = "Check-out date must be after check-in date!";
         header("Location: ../View/modifybooking.php");
         exit();
     }
@@ -22,23 +21,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["booking_id"], $_POST["
     $db = new db();
     $conn = $db->openConn();
 
-    // Get room_id for this booking
-    $sql_room = "SELECT room_id FROM bookings WHERE booking_id=?";
+    $sql_room = "SELECT room_id, total_price, checkin_date, checkout_date FROM bookings WHERE booking_id=?";
     $stmt = $conn->prepare($sql_room);
     $stmt->bind_param("i", $booking_id);
     $stmt->execute();
-    $room_id = $stmt->get_result()->fetch_assoc()["room_id"];
+    $booking = $stmt->get_result()->fetch_assoc();
 
-    // Check room availability
-    $sql_conflict = "SELECT COUNT(*) AS conflict FROM bookings 
-                     WHERE room_id=? AND booking_id!=? AND 
-                     ((? BETWEEN checkin_date AND checkout_date) OR 
-                      (? BETWEEN checkin_date AND checkout_date) OR
-                      (checkin_date BETWEEN ? AND ?) OR 
-                      (checkout_date BETWEEN ? AND ?))";
+    if (!$booking) {
+        $_SESSION['modify_error'] = "Booking not found!";
+        header("Location: ../View/modifybooking.php");
+        exit();
+    }
+
+    $room_id = $booking["room_id"];
+
+    $sql_conflict = "SELECT COUNT(*) AS conflict FROM bookings
+                     WHERE room_id=? AND booking_id!=? AND bookout_date IS NULL AND
+                     (checkin_date < ? AND checkout_date > ?)";
 
     $stmt2 = $conn->prepare($sql_conflict);
-    $stmt2->bind_param("iissssss", $room_id, $booking_id, $new_checkin, $new_checkout, $new_checkin, $new_checkout, $new_checkin, $new_checkout);
+    $stmt2->bind_param("iiss", $room_id, $booking_id, $new_checkout, $new_checkin);
     $stmt2->execute();
     $conflict = $stmt2->get_result()->fetch_assoc()["conflict"];
 
@@ -48,16 +50,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["booking_id"], $_POST["
         exit();
     }
 
-    // Update booking dates
-    $sql_update = "UPDATE bookings SET checkin_date=?, checkout_date=? WHERE booking_id=?";
+    $sql_price = "SELECT price FROM rooms WHERE room_id=? LIMIT 1";
+    $stmt_price = $conn->prepare($sql_price);
+    $stmt_price->bind_param("i", $room_id);
+    $stmt_price->execute();
+    $room = $stmt_price->get_result()->fetch_assoc();
+
+    $date1 = new DateTime($new_checkin);
+    $date2 = new DateTime($new_checkout);
+    $nights = max(1, $date1->diff($date2)->days);
+    $total_price = $nights * floatval($room["price"]);
+
+    $sql_update = "UPDATE bookings SET checkin_date=?, checkout_date=?, total_price=? WHERE booking_id=?";
     $stmt3 = $conn->prepare($sql_update);
-    $stmt3->bind_param("ssi", $new_checkin, $new_checkout, $booking_id);
+    $stmt3->bind_param("ssdi", $new_checkin, $new_checkout, $total_price, $booking_id);
     $stmt3->execute();
 
-    // Close statements and connection
+    $sql_bill = "UPDATE billing SET base_amount=?, total_amount=(? + extras_amount - discount_amount), payment_status='pending', paid_at=NULL WHERE booking_id=? AND payment_status='pending'";
+    $stmt_bill = $conn->prepare($sql_bill);
+    $stmt_bill->bind_param("ddi", $total_price, $total_price, $booking_id);
+    $stmt_bill->execute();
+
     $stmt->close();
     $stmt2->close();
+    $stmt_price->close();
     $stmt3->close();
+    $stmt_bill->close();
     $db->closeConn($conn);
 
     $_SESSION['modify_success'] = "Booking dates updated successfully!";

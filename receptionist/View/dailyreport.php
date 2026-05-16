@@ -9,41 +9,43 @@ $conn = $db->openConn();
 
 $today = date("Y-m-d");
 
-// Total check-ins today
-$sql_checkins = "SELECT COUNT(*) AS total_checkins FROM bookings WHERE checkin_date=?";
+$sql_checkins = "SELECT COUNT(*) AS total_checkins FROM bookings WHERE bookin_date=?";
 $stmt = $conn->prepare($sql_checkins);
 $stmt->bind_param("s", $today);
 $stmt->execute();
 $total_checkins = $stmt->get_result()->fetch_assoc()["total_checkins"];
 
-// Total check-outs today
-$sql_checkouts = "SELECT COUNT(*) AS total_checkouts FROM bookings WHERE checkout_date=?";
+$sql_checkouts = "SELECT COUNT(*) AS total_checkouts FROM bookings WHERE bookout_date=?";
 $stmt2 = $conn->prepare($sql_checkouts);
 $stmt2->bind_param("s", $today);
 $stmt2->execute();
 $total_checkouts = $stmt2->get_result()->fetch_assoc()["total_checkouts"];
 
-// Total walk-ins today
-$sql_walkins = "SELECT COUNT(*) AS total_walkins FROM bookings WHERE notes='checked_in' AND created_at LIKE CONCAT(?, '%')";
+$sql_walkins = "SELECT COUNT(*) AS total_walkins FROM bookings WHERE DATE(created_at)=? AND bookin_date=?";
 $stmt3 = $conn->prepare($sql_walkins);
-$stmt3->bind_param("s", $today);
+$stmt3->bind_param("ss", $today, $today);
 $stmt3->execute();
 $total_walkins = $stmt3->get_result()->fetch_assoc()["total_walkins"];
 
-// Total revenue today (paid bookings)
-$sql_revenue = "SELECT IFNULL(SUM(total_price),0) AS total_revenue FROM bookings WHERE notes='paid' AND checkin_date=?";
+$sql_revenue = "SELECT IFNULL(SUM(total_amount),0) AS total_revenue FROM billing WHERE payment_status='paid' AND DATE(paid_at)=?";
 $stmt4 = $conn->prepare($sql_revenue);
 $stmt4->bind_param("s", $today);
 $stmt4->execute();
 $total_revenue = $stmt4->get_result()->fetch_assoc()["total_revenue"];
 
-// Rooms currently occupied vs available
 $sql_rooms = "SELECT COUNT(*) AS occupied FROM rooms WHERE notes='occupied'";
 $occupied = $conn->query($sql_rooms)->fetch_assoc()["occupied"];
 
 $sql_rooms2 = "SELECT COUNT(*) AS available FROM rooms WHERE notes='available'";
 $available = $conn->query($sql_rooms2)->fetch_assoc()["available"];
 
+$sql_dirty = "SELECT COUNT(*) AS dirty FROM rooms WHERE notes='dirty'";
+$dirty = $conn->query($sql_dirty)->fetch_assoc()["dirty"];
+
+$stmt->close();
+$stmt2->close();
+$stmt3->close();
+$stmt4->close();
 $db->closeConn($conn);
 ?>
 
@@ -54,20 +56,20 @@ $db->closeConn($conn);
 
     <div class="report-cards">
         <div class="card">
-            <h3>Total Check-ins</h3>
+            <h3>Total Arrivals</h3>
             <p><?php echo $total_checkins; ?></p>
         </div>
         <div class="card">
-            <h3>Total Check-outs</h3>
+            <h3>Total Departures</h3>
             <p><?php echo $total_checkouts; ?></p>
         </div>
         <div class="card">
-            <h3>Total Walk-ins</h3>
+            <h3>Walk-ins</h3>
             <p><?php echo $total_walkins; ?></p>
         </div>
         <div class="card">
-            <h3>Total Revenue</h3>
-            <p><?php echo $total_revenue; ?> BDT</p>
+            <h3>Revenue Collected</h3>
+            <p><?php echo number_format($total_revenue, 2); ?> BDT</p>
         </div>
         <div class="card">
             <h3>Rooms Occupied</h3>
@@ -77,5 +79,11 @@ $db->closeConn($conn);
             <h3>Rooms Available</h3>
             <p><?php echo $available; ?></p>
         </div>
+        <div class="card">
+            <h3>Rooms Dirty</h3>
+            <p><?php echo $dirty; ?></p>
+        </div>
     </div>
+
+    <button onclick="window.print()" class="btn-print">Print Report</button>
 </div>

@@ -7,12 +7,11 @@ require_once("../Model/db.php");
 $db = new db();
 $conn = $db->openConn();
 
-// Fetch guests with points balance
-$sql = "SELECT u.user_id, u.name, u.email, IFNULL(SUM(lp.balance),0) AS points_balance
+$sql = "SELECT u.user_id, u.name, u.email,
+               IFNULL((SELECT lp.balance FROM loyalty_points lp WHERE lp.guest_id = u.user_id ORDER BY lp.loyalty_id DESC LIMIT 1),0) AS points_balance
         FROM users u
-        LEFT JOIN loyalty_points lp ON u.user_id = lp.guest_id
         WHERE u.role='guest'
-        GROUP BY u.user_id";
+        ORDER BY u.name ASC";
 $stmt = $conn->prepare($sql);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -40,18 +39,18 @@ $result = $stmt->get_result();
                 <tr>
                     <th>Guest Name</th>
                     <th>Email</th>
-                    <th>Points Balance</th>
-                    <th>Apply Points</th>
+                    <th>Current Balance</th>
+                    <th>Manual Redeem</th>
                 </tr>
             </thead>
             <tbody>
                 <?php while($row = $result->fetch_assoc()) { ?>
                 <tr>
-                    <td><?php echo $row['name']; ?></td>
-                    <td><?php echo $row['email']; ?></td>
+                    <td><?php echo htmlspecialchars($row['name']); ?></td>
+                    <td><?php echo htmlspecialchars($row['email']); ?></td>
                     <td><?php echo $row['points_balance']; ?></td>
                     <td>
-                        <form action="../Control/loyaltyController.php" method="post">
+                        <form action="../Control/loyaltyController.php" method="post" class="inline-form">
                             <input type="hidden" name="guest_id" value="<?php echo $row['user_id']; ?>">
                             <input type="number" name="points" min="1" max="<?php echo $row['points_balance']; ?>" required>
                             <button type="submit" class="btn-apply">Apply</button>
@@ -63,3 +62,8 @@ $result = $stmt->get_result();
         </table>
     </div>
 </div>
+
+<?php
+$stmt->close();
+$db->closeConn($conn);
+?>

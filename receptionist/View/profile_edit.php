@@ -13,6 +13,8 @@ $stmt = $conn->prepare($sql);
 $stmt->bind_param("i",$user_id);
 $stmt->execute();
 $user = $stmt->get_result()->fetch_assoc();
+
+$stmt->close();
 $db->closeConn($conn);
 ?>
 
@@ -33,17 +35,19 @@ $db->closeConn($conn);
     ?>
 
     <form action="../Control/profileController.php" method="post" class="profile-form">
-        <div class="form-group">
-            <label>Name</label>
-            <input type="text" name="name" value="<?php echo $user['name']; ?>" required>
-        </div>
-        <div class="form-group">
-            <label>Email</label>
-            <input type="email" name="email" value="<?php echo $user['email']; ?>" required>
-        </div>
-        <div class="form-group">
-            <label>Phone</label>
-            <input type="text" name="phone" value="<?php echo $user['phone']; ?>">
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" name="name" value="<?php echo htmlspecialchars($user['name']); ?>" required>
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required>
+            </div>
+            <div class="form-group">
+                <label>Phone</label>
+                <input type="text" name="phone" value="<?php echo htmlspecialchars($user['phone']); ?>">
+            </div>
         </div>
         <button type="submit" class="btn-save">Update Profile</button>
     </form>

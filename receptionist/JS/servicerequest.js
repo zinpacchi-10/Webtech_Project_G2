@@ -14,7 +14,6 @@ function updateServiceStatus(requestId, status) {
     xhr.send("request_id="+requestId+"&status="+status);
 }
 
-// Attach event listeners to select dropdowns
 document.querySelectorAll(".service-select").forEach(function(sel){
     sel.addEventListener("change", function(){
         var requestId = this.dataset.requestId;

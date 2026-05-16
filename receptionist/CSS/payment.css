@@ -1,58 +1,10 @@
-.main-content h1 {
-    margin-bottom: 25px;
-    color: #1f2937;
-}
+@import url("receptionistcommon.css");
 
 .payment-table-container {
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 12px 25px rgba(0,0,0,0.1);
+    background: #ffffff;
+    padding: 22px;
+    border-radius: 22px;
+    border: 1px solid #e4ebf5;
+    box-shadow: 0 18px 40px rgba(31, 47, 80, 0.10);
     overflow-x: auto;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-table th, table td {
-    text-align: left;
-    padding: 12px 15px;
-    border-bottom: 1px solid #e0e0e0;
-}
-
-table th {
-    background: #1f4e79;
-    color: white;
-    font-weight: 600;
-}
-
-table tr:hover {
-    background: #f0f4f8;
-}
-
-.btn-pay {
-    padding: 8px 12px;
-    background: #2563eb;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-.btn-pay:hover {
-    background: #1e40af;
-}
-
-.success-message {
-    color: #16a34a;
-    font-weight: bold;
-    margin-bottom: 15px;
-}
-
-.error-message {
-    color: #dc2626;
-    font-weight: bold;
-    margin-bottom: 15px;
 }

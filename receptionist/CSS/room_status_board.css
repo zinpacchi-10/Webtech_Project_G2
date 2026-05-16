@@ -1,34 +1,35 @@
-.main-content h1{
-    margin-bottom:25px;
-    color:#1f2937;
+@import url("receptionistcommon.css");
+
+#roomStatusBoard {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
 }
 
-#roomStatusBoard{
-    display:flex;
-    flex-wrap:wrap;
-    gap:15px;
-    list-style:none;
-    padding:0;
+.room-item {
+    background: #ffffff;
+    border: 1px solid #e4ebf5;
+    border-radius: 18px;
+    padding: 18px;
+    font-weight: 800;
+    color: #102542;
+    box-shadow: 0 16px 32px rgba(31, 47, 80, 0.10);
 }
 
-.room-item{
-    flex:1 1 120px;
-    background:white;
-    padding:15px;
-    border-radius:12px;
-    box-shadow:0 8px 20px rgba(0,0,0,0.1);
-    text-align:center;
-    font-weight:bold;
-    color:#1f2937;
-    transition:transform 0.2s, box-shadow 0.2s;
+.room-item.available {
+    border-left: 6px solid #10b981;
 }
 
-.room-item:hover{
-    transform:translateY(-4px);
-    box-shadow:0 12px 28px rgba(0,0,0,0.15);
+.room-item.occupied {
+    border-left: 6px solid #ef4444;
 }
 
-.room-item.available{background:#d1fae5;color:#065f46;}
-.room-item.occupied{background:#fee2e2;color:#991b1b;}
-.room-item.dirty{background:#fef3c7;color:#92400e;}
-.room-item.maintenance{background:#e0e7ff;color:#3730a3;}
+.room-item.dirty {
+    border-left: 6px solid #f59e0b;
+}
+
+.room-item.maintenance {
+    border-left: 6px solid #7c3aed;
+}

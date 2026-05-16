@@ -6,7 +6,6 @@ require_once("../Model/db.php");
 
 $db = new db();
 $conn = $db->openConn();
-
 $receptionist_id = $_SESSION["receptionist_id"];
 
 $sql = "SELECT name, email, phone, id_number FROM users WHERE user_id=? AND role='receptionist'";
@@ -16,6 +15,7 @@ $stmt->execute();
 $result = $stmt->get_result();
 $user = $result->fetch_assoc();
 
+$stmt->close();
 $db->closeConn($conn);
 ?>
 
@@ -23,10 +23,29 @@ $db->closeConn($conn);
 
 <div class="main-content">
     <h1>My Profile</h1>
+
     <div class="profile-card">
-        <p><strong>Name:</strong> <?php echo $user['name']; ?></p>
-        <p><strong>Email:</strong> <?php echo $user['email']; ?></p>
-        <p><strong>Phone:</strong> <?php echo $user['phone']; ?></p>
-        <p><strong>ID Number:</strong> <?php echo $user['id_number']; ?></p>
+        <div class="profile-top">
+            <div class="profile-avatar"><?php echo strtoupper(substr($user['name'], 0, 1)); ?></div>
+            <div>
+                <h2><?php echo htmlspecialchars($user['name']); ?></h2>
+                <p>Reception Desk Panel</p>
+            </div>
+        </div>
+
+        <div class="profile-grid">
+            <div class="profile-field">
+                <span>Email</span>
+                <strong><?php echo htmlspecialchars($user['email']); ?></strong>
+            </div>
+            <div class="profile-field">
+                <span>Phone</span>
+                <strong><?php echo htmlspecialchars($user['phone']); ?></strong>
+            </div>
+            <div class="profile-field">
+                <span>ID Number</span>
+                <strong><?php echo htmlspecialchars($user['id_number']); ?></strong>
+            </div>
+        </div>
     </div>
 </div>

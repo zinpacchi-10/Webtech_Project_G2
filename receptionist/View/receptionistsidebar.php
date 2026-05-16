@@ -6,22 +6,44 @@
 </head>
 <body>
     <div class="sidenav" id="theSideNav">
-        <a href="javascript:void(0)" id="closebtn" onclick="closeNav()">&times;</a>
+        <div class="sidebar-brand">Hotel Reception</div>
 
-        <a id="label">Reception Desk</a>
-        <a href="receptionistdashboard.php">Dashboard</a>
-        <a href="checkin.php">Guest Check-In</a>
-        <a href="checkout.php">Guest Check-Out</a>
-        <a href="walkin.php">Walk-In Booking</a>
+        <button type="button" class="dropdown-btn">Reception Desk <span>+</span></button>
+        <div class="dropdown-container">
+            <a href="receptionistdashboard.php">Dashboard</a>
+            <a href="checkin.php">Guest Check-In</a>
+            <a href="checkout.php">Guest Check-Out</a>
+            <a href="walkin.php">Walk-In Booking</a>
+            <a href="modifybooking.php">Modify Booking</a>
+        </div>
 
-        <a id="label">Guest Services</a>
-        <a href="service_requests.php">Service Requests</a>
+        <button type="button" class="dropdown-btn">Payments <span>+</span></button>
+        <div class="dropdown-container">
+            <a href="paymentlist.php">Guest Payments</a>
+            <a href="loyaltypoints.php">Loyalty Points</a>
+        </div>
 
-        <a id="label">Room Management</a>
-        <a href="room_status_board.php">Room Status Board</a>
+        <button type="button" class="dropdown-btn">Guest Services <span>+</span></button>
+        <div class="dropdown-container">
+            <a href="servicerequest.php">Service Requests</a>
+            <a href="early_late_requests.php">Early / Late Requests</a>
+        </div>
 
-        <a id="label">Front Desk Report</a>
-        <a href="daily_report.php">Daily Operation Report</a>
+        <button type="button" class="dropdown-btn">Room Management <span>+</span></button>
+        <div class="dropdown-container">
+            <a href="room_status_board.php">Room Status Board</a>
+        </div>
+
+        <button type="button" class="dropdown-btn">Front Desk Report <span>+</span></button>
+        <div class="dropdown-container">
+            <a href="dailyreport.php">Daily Operation Report</a>
+        </div>
+
+        <div class="account-title">Account</div>
+        <a href="profile.php">My Profile</a>
+        <a href="profile_edit.php">Edit Profile</a>
+        <a href="changePassword.php">Change Password</a>
+        <a class="logout-link" href="../Control/receptionistlogoutController.php">Logout</a>
     </div>
 
     <script src="../JS/receptionistsidebar.js"></script>

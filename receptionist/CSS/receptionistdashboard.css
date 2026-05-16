@@ -1,78 +1,110 @@
-.main-content h1{
-    margin-bottom:25px;
-    color:#1f2937;
+@import url("receptionistcommon.css");
+
+.dashboard-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+    margin-bottom: 26px;
 }
 
-.dashboard-cards{
-    display:flex;
-    flex-wrap:wrap;
-    gap:20px;
-    margin-bottom:30px;
-}
-
-.card{
-    flex:1 1 220px;
-    padding:20px;
-    border-radius:12px;
-    text-align:center;
-    font-weight:bold;
-    color:white;
-    box-shadow:0 12px 25px rgba(0,0,0,0.1);
+.card {
+    min-height: 150px;
+    padding: 22px;
+    border-radius: 22px;
+    color: white;
+    box-shadow: 0 18px 36px rgba(31, 47, 80, 0.18);
     transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
 }
 
-.card:hover{
-    transform:translateY(-5px);
-    box-shadow:0 18px 28px rgba(0,0,0,0.15);
+.card::after {
+    content: "";
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    right: -40px;
+    top: -40px;
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 50%;
 }
 
-.card h3{
-    margin-bottom:15px;
-    font-size:18px;
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 26px 46px rgba(31, 47, 80, 0.24);
 }
 
-.card p{
-    font-size:22px;
+.card h3 {
+    margin: 0 0 22px;
+    font-size: 17px;
+    font-weight: 800;
 }
 
-.card-blue{background:#2563eb;}
-.card-red{background:#dc2626;}
-.card-green{background:#16a34a;}
-.card-yellow{background:#facc15;}
-
-.chart-container{
-    background:white;
-    padding:20px;
-    border-radius:12px;
-    box-shadow:0 12px 25px rgba(0,0,0,0.1);
-    margin-top:30px;
+.card p {
+    margin: 0;
+    font-size: 34px;
+    font-weight: 900;
 }
 
-.table-container{
-    background:white;
-    padding:20px;
-    border-radius:12px;
-    box-shadow:0 12px 25px rgba(0,0,0,0.1);
-    overflow-x:auto;
+.card-blue {
+    background: linear-gradient(135deg, #2563eb, #1e40af);
 }
 
-table{
-    width:100%;
-    border-collapse:collapse;
+.card-red {
+    background: linear-gradient(135deg, #ef4444, #b91c1c);
 }
 
-table th, table td{
-    text-align:left;
-    padding:12px 15px;
-    border-bottom:1px solid #e0e0e0;
+.card-green {
+    background: linear-gradient(135deg, #10b981, #047857);
 }
 
-table th{
-    background:#1f4e79;
-    color:white;
-    font-weight:600;
+.card-yellow {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
 }
 
-table tr:hover{
-    background:#f0f4f8;
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+    gap: 20px;
+    align-items: stretch;
+    margin-bottom: 30px;
+}
+
+.chart-container,
+.type-panel,
+.table-container {
+    background: #ffffff;
+    padding: 22px;
+    border-radius: 22px;
+    border: 1px solid #e4ebf5;
+    box-shadow: 0 18px 40px rgba(31, 47, 80, 0.10);
+}
+
+.chart-container {
+    min-height: 360px;
+}
+
+.type-panel h2 {
+    margin-top: 0;
+}
+
+.type-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid #e5eaf3;
+    color: #32435c;
+    font-weight: 800;
+}
+
+.type-row strong {
+    background: #e0f2fe;
+    color: #075985;
+    border-radius: 999px;
+    padding: 7px 13px;
+}
+
+.table-container {
+    overflow-x: auto;
 }

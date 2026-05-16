@@ -14,20 +14,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["guest_id"], $_POST["po
     $db = new db();
     $conn = $db->openConn();
 
-    // Check current balance
-    $sql_balance = "SELECT IFNULL(SUM(balance),0) AS total_points FROM loyalty_points WHERE guest_id=?";
+    $sql_balance = "SELECT IFNULL(balance,0) AS total_points
+                    FROM loyalty_points
+                    WHERE guest_id=?
+                    ORDER BY loyalty_id DESC
+                    LIMIT 1";
     $stmt = $conn->prepare($sql_balance);
     $stmt->bind_param("i", $guest_id);
     $stmt->execute();
-    $balance = $stmt->get_result()->fetch_assoc()["total_points"];
+    $row = $stmt->get_result()->fetch_assoc();
+    $balance = $row ? intval($row["total_points"]) : 0;
 
-    if($points > $balance) {
+    if($points <= 0 || $points > $balance) {
         $_SESSION['loyalty_error'] = "Points to redeem exceed balance!";
         header("Location: ../View/loyaltypoints.php");
         exit();
     }
 
-    // Deduct points
     $sql_deduct = "INSERT INTO loyalty_points (guest_id, booking_id, points_earned, points_used, balance, created_at)
                    VALUES (?, NULL, 0, ?, ? , NOW())";
     $new_balance = $balance - $points;

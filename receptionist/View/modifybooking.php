@@ -7,12 +7,13 @@ require_once("../Model/db.php");
 $db = new db();
 $conn = $db->openConn();
 
-// Fetch all bookings
-$sql = "SELECT b.booking_id, u.name AS guest_name, r.room_number, b.checkin_date, b.checkout_date, b.num_guests
+$sql = "SELECT b.booking_id, u.name AS guest_name, r.room_number, b.checkin_date, b.checkout_date, b.num_guests,
+               IF(b.bookin_date IS NULL, 'Pending', IF(b.bookout_date IS NULL, 'Checked In', 'Checked Out')) AS booking_status
         FROM bookings b
         JOIN users u ON b.guest_id = u.user_id
         JOIN rooms r ON b.room_id = r.room_id
-        WHERE b.notes='checked_in' OR b.notes='pending'";
+        WHERE b.bookout_date IS NULL
+        ORDER BY b.checkin_date ASC";
 
 $stmt = $conn->prepare($sql);
 $stmt->execute();
@@ -40,29 +41,27 @@ $result = $stmt->get_result();
             <thead>
                 <tr>
                     <th>Booking ID</th>
-                    <th>Guest Name</th>
-                    <th>Room Number</th>
-                    <th>Check-in Date</th>
-                    <th>Check-out Date</th>
-                    <th>Number of Guests</th>
-                    <th>Action</th>
+                    <th>Guest</th>
+                    <th>Room</th>
+                    <th>Current Dates</th>
+                    <th>Guests</th>
+                    <th>Status</th>
+                    <th>New Dates</th>
                 </tr>
             </thead>
             <tbody>
                 <?php while($row = $result->fetch_assoc()) { ?>
                 <tr>
                     <td><?php echo $row['booking_id']; ?></td>
-                    <td><?php echo $row['guest_name']; ?></td>
-                    <td><?php echo $row['room_number']; ?></td>
-                    <td><?php echo $row['checkin_date']; ?></td>
-                    <td><?php echo $row['checkout_date']; ?></td>
+                    <td><?php echo htmlspecialchars($row['guest_name']); ?></td>
+                    <td><?php echo htmlspecialchars($row['room_number']); ?></td>
+                    <td><?php echo $row['checkin_date']." to ".$row['checkout_date']; ?></td>
                     <td><?php echo $row['num_guests']; ?></td>
+                    <td><span class="status-badge"><?php echo $row['booking_status']; ?></span></td>
                     <td>
-                        <form action="../Control/modifyBookingController.php" method="post">
+                        <form action="../Control/modifyBookingController.php" method="post" class="modify-form">
                             <input type="hidden" name="booking_id" value="<?php echo $row['booking_id']; ?>">
-                            <label>New Check-in:</label>
                             <input type="date" name="checkin_date" required>
-                            <label>New Check-out:</label>
                             <input type="date" name="checkout_date" required>
                             <button type="submit" class="btn-modify">Update</button>
                         </form>
@@ -73,3 +72,8 @@ $result = $stmt->get_result();
         </table>
     </div>
 </div>
+
+<?php
+$stmt->close();
+$db->closeConn($conn);
+?>
