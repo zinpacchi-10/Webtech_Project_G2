@@ -88,7 +88,6 @@ $db->closeConn($conn);
                 $stmt->bind_param("s", $today);
                 $stmt->execute();
                 $result = $stmt->get_result();
-
                 while($row = $result->fetch_assoc()){
                     echo "<tr>
                         <td>{$row['booking_id']}</td>
@@ -99,7 +98,6 @@ $db->closeConn($conn);
                         <td>{$row['num_guests']}</td>
                     </tr>";
                 }
-
                 $stmt->close();
                 $db->closeConn($conn);
                 ?>
