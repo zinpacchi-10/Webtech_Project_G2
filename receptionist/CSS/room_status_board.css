@@ -1,0 +1,35 @@
+@import url("receptionistcommon.css");
+
+#roomStatusBoard {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+}
+
+.room-item {
+    background: #ffffff;
+    border: 1px solid #e4ebf5;
+    border-radius: 18px;
+    padding: 18px;
+    font-weight: 800;
+    color: #102542;
+    box-shadow: 0 16px 32px rgba(31, 47, 80, 0.10);
+}
+
+.room-item.available {
+    border-left: 6px solid #10b981;
+}
+
+.room-item.occupied {
+    border-left: 6px solid #ef4444;
+}
+
+.room-item.dirty {
+    border-left: 6px solid #f59e0b;
+}
+
+.room-item.maintenance {
+    border-left: 6px solid #7c3aed;
+}

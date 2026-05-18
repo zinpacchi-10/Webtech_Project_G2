@@ -1,0 +1,13 @@
+@import url("receptionistcommon.css");
+
+.profile-form {
+    max-width: 760px;
+}
+
+.profile-form .form-group {
+    margin-bottom: 16px;
+}
+
+.btn-save {
+    margin-top: 6px;
+}

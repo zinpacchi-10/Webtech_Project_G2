@@ -1,0 +1,9 @@
+@import url("receptionistcommon.css");
+
+.walkin-form {
+    max-width: 980px;
+}
+
+.btn-walkin {
+    margin-top: 18px;
+}
